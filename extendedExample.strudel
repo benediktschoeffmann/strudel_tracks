@@ -1,0 +1,35 @@
+setcpm(142 / 4)
+
+    $ : stack(
+            s("[hh hh oh@2]*4").bank("tr808").color("blue"),
+            s("[bd ~ ~ ~]*4").bank("tr909").distort(".5:1:diode").color("green"),
+            s("[~ sd]*2").gain(1.2).delay(.5).bank("tr606").color("red"),
+            s("[cp]").gain(slider(0.2336, .1, .5)).euclid(3, 17).room(1.2).decay(0.2))
+            ._pianoroll()
+
+                $ : s("tri")
+            .seg(16)
+            .octave(2)
+            .n(irand(24))
+
+            .scale("Eb2:lydian")
+            .degradeBy(0.2)
+            .sometimesBy(0.2, x = > x.clip(1.2))
+            .sometimesBy(0.3, x = > x.sub(5))
+            .delay(0.4)
+            .room(1)
+            .lpf(sine.range(700, 4000))
+            .lpq(tri.range(0, 10))
+            .compressor(10)
+            .vib(0.1)
+            .color("yellow")
+            ._spectrum()
+
+                        $ : n("[~ 0 8 0]*4")
+            .sometimesBy(.2, x = > x.sub("5P"))
+            .scale("Eb1:minor")
+            .s("saw")
+            .decay(.3)
+            .lpf(1200)
+            .color("yellow")
+            ._scope()
