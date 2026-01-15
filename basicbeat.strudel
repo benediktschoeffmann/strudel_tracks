@@ -1,0 +1,5 @@
+setcpm(142/4) 
+
+$: s("[hh hh oh@2]*4").bank("tr808") 
+$: s("[bd ~ ~ ~]*4").bank("tr909").dist(.5)
+$: s("[~ sd]*2").delay(.5).bank("tr606")
