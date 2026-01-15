@@ -1,0 +1,19 @@
+setcpm(142/4) 
+
+$: s("[hh hh oh@2]*4").bank("tr808") 
+$: s("[bd ~ ~ ~]*4").bank("tr909").dist(.5) 
+$: s("[~ sd]*2").delay(.5).bank("tr606") 
+
+$: s("tri").seg(16)
+  .n(irand(24)) 
+  .scale("Eb2:lydian") 
+  .delay(0.25)
+  .room(0.7) 
+  .lpf(sine.range(700,4000)) 
+  .compressor(10)
+  .vib(0.2)
+
+$: n("[~ 0 8 0]*4").sometimes(x => x.transpose(5P))
+   .scale("Eb1:minor")
+   .s("saw")
+   .decay(.3)
