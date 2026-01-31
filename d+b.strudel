@@ -1,0 +1,68 @@
+samples('github:glossings/samples/main/fmdemo')
+
+setcpm(170 / 4)
+
+const melody = n(irand(24).seg(4)).scale("F:minor").transpose(12)
+  .s("saw").rel(0.5)
+  .fm(slider(0.174, 0, 1)).fmwave("pink")
+  .delay(slider(0.864, 0.2, 1.2))
+  .room(slider(1.022,0.5,2))
+  .distort(slider(0.5903, 0.5, 1.2))
+  .postgain(1.2)
+ 
+const bassline = s("wt_digital").note("<F1*4 <F2 C3>>")
+  .compressor(-20)
+  .chebyshev(2)
+  .wtrate(0.4)
+  .unison(3).detune(0.3)
+  .pan(sine.range(0,1))
+  .postgain(1.8)
+  .room(0.5)
+  .orbit(2)
+  // .duck(0.1)
+  .o(4)
+  .color("cyan")
+
+const loop = s("breaks/2").bank("fmdemo")
+  .fit().compressor(-20).soft(2).lpf(8000)
+const kick = s(`<
+  bd@2 ~@2
+  ~ bd ~@2
+  bd@2 ~ [bd:0:0.7 bd:0:0.9]
+  ~ bd ~@2
+  bd@2 ~@2
+  ~ bd ~@2
+  bd@2 ~ ~
+  ~ [~ bd] ~ bd
+>*8`).bank("fmdemo")
+  .orbit(2)
+  .duck(4).duckatt(0.3).duckdepth(0.7)
+const snare = s(`<~ sd>*4`).bank("fmdemo").dist(2).room(0.4).delay(0.25)
+const ride = s("[rd rd rd rd rd rd rd [ rd rd | rd ]]").bank("tr909")
+const hihat = s(`[hh?0.15]*16`).bank("tr909")
+const openhi = s(`[~ oh]*4`).bank("tr909")
+const crash = s(`[cr]/16`).bank("tr909")
+const tabla = s(`[tb?0.3]*8`).bank("yamahatg33")
+
+const tr909 = stack(
+  ride,
+  hihat,
+  openhi,
+  crash
+)
+
+const drums = stack(
+  loop,
+  kick,
+  tr909,
+  tabla,
+  snare
+)
+.color('green')
+._punchcard()
+
+stack(
+  drums.gain(slider(1, 0, 1)),
+  bassline.gain(slider(1, 0, 1)),
+  melody.gain(slider(1, 0, 1))
+).color('blue')._scope()
