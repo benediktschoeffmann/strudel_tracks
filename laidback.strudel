@@ -1,0 +1,101 @@
+
+
+setcpm(210 / 4)
+
+const lead = n()
+
+const melody = 
+  n("[0@2 ~ ~ 8@2 ~ 5 ~  ~ 1@2 [~ [0@2 8@2]]!0.1]/4"
+     // .add("<5 6 1@2 4 5 2@2>/8")
+     // // .sub("<0 0 0 5>/16")
+  )          
+  .fast(1)
+  .scale("F:major").transpose(19).octave("<1 2 0>/4")
+  .s("sawtooth")
+    .att(rand.range(0.2, 1).seq(4))
+    .decay(rand.range(0.2, 1.8).seq(16))
+    .sustain(2)
+    .release(slider(0.316, 0 , 0.5))
+    .pan(sine.range(0, 1).slow(8))
+    .distort(slider(0.3608, 0.2, 1))
+  // .hp(rand.range(1200, 3500))
+  .lp(slider(768.5, 500, 2000))
+  .postgain(2)
+  .room(slider(0.5565,0.2,2.5))
+  .delay(slider(1.028, 0.2, 2))
+  .delaysync("<1 2 3 5>".div(8))
+  .delayfb(slider(0.68774 ,0.1, 1))
+  .delaytime(1.4)
+  .fm("<2 4 0 8>*2")
+  .fmdecay("<.01 .05 .1 .2>")
+  .fmh("<0.89 2 1.5 1.61>")
+  .fmwave("<crackle>")
+  .color("blue")
+  ._scope()
+  .color("green")
+
+const bass = n("<0 8 2 <4 [0 8]> 5 8 0 4>*16/4"
+               .add("<0 4 1 3 0 3 1 [2 5]>/2")
+               .sub("19")
+              ).scale("F:major").octave("0")
+  .s("sawtooth")
+  .decay(slider(0.252, 0, 1))
+  .release(0.2)
+  .attack(slider(0.1518, 0.1, 0.3))
+
+  // .lp(slider(1765.6, 800, 2500))
+  .lp(rand.range(200, 1500).fast(8))
+  .lpq(rand.range(2, 10).seq(8))
+  .distort(slider(0.95, 0, 1))
+  .room(slider(0,0, 1))
+  .duckorbit(2)
+
+const leads = stack(
+  melody.gain(slider(0.693, 0, 1)).color("yellow"),
+  bass.gain(slider(0.903, 0, 1)).color("cyan")
+)
+
+const kick = s("[bd bd bd [bd bd?0.8]]/2").bank("tr909")
+  .decay(slider(0.514, 0.1, 1))
+  .distort(slider(0.3744, 0, 1.2))
+  .distorttype("asym")
+  .duckorbit(2)
+  .duckattack(0.3)
+  .duckdepth(0.9)
+
+  .duck(.2)
+
+const hihat = s("<hh hh hh hh>*8").bank("tr909")
+  .gain("<.1 .5 .9 .8>*8")
+  .decay(rand.range(0.2, 0.8))
+  .release(rand.range(0.2, 0.4))
+
+const openhi = s("[~ oh]*2").bank("TR707")
+  .decay(rand.range(0.15, 0.5))
+  hpf(rand.range(800, 4000))
+
+const snare = s("<sd>").euclid(3,16).bank("tr707")
+  .room(rand.range(0.2, 0.8))
+  .delay(slider(0.542, 0.5, 1.5))
+  .delayfb(slider(0.014, 0, 0.1))
+  // .gain(1.2)
+  .distort(1)
+
+const crash = s("<cr>/16").bank("TR909")
+  .decay(slider(0, 0, 0.5))
+
+const rim = s("[rim rim!0.2]*4/3").bank("TR909")
+  .room(2)
+  
+
+const drums = stack(
+  kick.gain(slider(0.624, 0, 1)).color("green"),
+  hihat.gain(slider(0.181, 0, 1)).color("brown"),
+  snare.gain(slider(0.22, 0, 1)).color("black"),
+  crash.gain(slider(0.656, 0, 1)).color("red"),
+  openhi.gain(slider(0.297540, 1)).color("yellow"),
+  rim.gain(slider(0.482, 0, 1)).color("purple") 
+)
+stack(
+  leads._punchcard(),drums._punchcard())
+
